@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F GARAGE | Architecture Automobile</title>
+    <meta name="description" content="F Garage Algérie : Le spécialiste du Ciel Étoilé, PPF et Personnalisation. Un studio de transformation automobile, pas un centre de lavage.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        black: '#050505',
+                        dark: '#0a0a0a',
+                        gold: '#D4AF37',
+                        'gold-light': '#F1D676',
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'serif'],
+                        sans: ['Montserrat', 'sans-serif'],
+                    },
+                    spacing: {
+                        '128': '32rem',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #050505;
+            color: #e5e5e5;
+            overflow-x: hidden;
+        }
+
+        /* Luxury Gold Gradient Text */
+        .text-gold-gradient {
+            background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* Image Reveal on Card Hover */
+        .card-reveal::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 0.6s ease;
+            z-index: 0;
+            filter: brightness(0.4);
+        }
+        
+        .card-reveal:hover::before {
+            opacity: 1;
+        }
+
+        /* Specific Images for Cards - NOUVELLES IMAGES */
+        .bg-starry::before { background-image: url('https://images.unsplash.com/photo-1549399542-7e3f8b79c341?q=80&w=1974&auto=format&fit=crop'); }
+        .bg-ppf::before { background-image: url('https://images.unsplash.com/photo-1600706432502-763d5bb0046e?q=80&w=2070&auto=format&fit=crop'); }
+        .bg-solar::before { background-image: url('https://images.unsplash.com/photo-1489824904134-891ab64532f1?q=80&w=1931&auto=format&fit=crop'); }
+        .bg-dsp::before { background-image: url('https://images.unsplash.com/photo-1619767886558-efdc259cde1a?q=80&w=2070&auto=format&fit=crop'); }
+
+        /* Loader */
+        .loader-line {
+            animation: expandWidth 1.5s ease-in-out forwards;
+        }
+        @keyframes expandWidth {
+            0% { width: 0; }
+            100% { width: 100px; }
+        }
+    </style>
+</head>
+<body class="font-sans antialiased">
+
+    <!-- Loader -->
+    <div id="loader" class="fixed inset-0 z-[100] bg-black flex items-center justify-center transition-opacity duration-1000">
+        <div class="text-center">
+            <h1 class="font-serif text-4xl text-white mb-4 tracking-[0.3em]">F GARAGE</h1>
+            <div class="h-[2px] bg-gold mx-auto loader-line"></div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 px-6 py-6 transition-all duration-300 bg-gradient-to-b from-black/90 to-transparent">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="#" class="text-2xl md:text-3xl font-serif font-bold tracking-widest text-white relative group">
+                F GARAGE
+                <span class="absolute -bottom-2 left-0 w-0 h-[1px] bg-gold transition-all duration-300 group-hover:w-full"></span>
+            </a>
+            
+            <div class="hidden md:flex space-x-12 items-center">
+                <a href="#vision" class="text-xs uppercase tracking-[0.2em] text-white/70 hover:text-gold transition-colors">Vision</a>
+                <a href="#services" class="text-xs uppercase tracking-[0.2em] text-white/70 hover:text-gold transition-colors">Expertise</a>
+                <a href="#gallery" class="text-xs uppercase tracking-[0.2em] text-white/70 hover:text-gold transition-colors">Galerie</a>
+                <a href="#contact" class="px-8 py-3 border border-white/20 text-gold text-xs uppercase tracking-widest hover:border-gold hover:bg-gold hover:text-black transition-all duration-500">
+                    Contact
+                </a>
+            </div>
+
+            <button class="md:hidden text-gold text-2xl"><i class="fas fa-bars"></i></button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative h-screen w-full overflow-hidden">
+        <!-- Background Video/Image - NOUVELLE IMAGE -->
+        <div class="absolute inset-0">
+            <img src="https://images.unsplash.com/photo-1503376763036-066120622c74?q=80&w=2070&auto=format&fit=crop" 
+                 alt="Luxury Dark Car" 
+                 class="w-full h-full object-cover opacity-60 scale-105 animate-[pulse_10s_ease-in-out_infinite]">
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/60"></div>
+
+        <div class="relative z-10 h-full flex flex-col justify-center items-center text-center px-4">
+            <div class="mb-6 overflow-hidden">
+                <p class="text-gold text-xs md:text-sm uppercase tracking-[0.5em] animate-[slideUp_1s_ease-out]" data-aos="fade-up">
+                    Architecture Automobile
+                </p>
+            </div>
+            
+            <h1 class="text-5xl md:text-7xl lg:text-9xl font-serif text-white mb-8 leading-none tracking-tight" data-aos="fade-up" data-aos-delay="200">
+                SUBLIMATION<br>
+                <span class="text-gold-gradient italic text-4xl md:text-7xl lg:text-8xl block mt-2">Absolue.</span>
+            </h1>
+
+            <p class="text-gray-300 text-sm md:text-lg font-light max-w-xl mx-auto mb-12 tracking-wide leading-relaxed" data-aos="fade-up" data-aos-delay="400">
+                L'art de transformer l'ordinaire en exceptionnel. Ciel étoilé, protection invisible et personnalisation sur mesure.
+            </p>
+
+            <a href="#services" class="group relative inline-flex items-center justify-center px-8 py-4 overflow-hidden tracking-tighter text-white border border-white/30 rounded-full transition-all hover:border-gold" data-aos="fade-up" data-aos-delay="600">
+                <span class="absolute w-0 h-0 transition-all duration-500 ease-out bg-gold rounded-full group-hover:w-56 group-hover:h-56"></span>
+                <span class="relative text-xs uppercase tracking-[0.2em] group-hover:text-black font-semibold">Découvrir nos créations</span>
+            </a>
+        </div>
+        
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-12 left-0 right-0 flex justify-center animate-bounce">
+            <i class="fas fa-chevron-down text-white/30 text-xl"></i>
+        </div>
+    </header>
+
+    <!-- Vision Section -->
+    <section id="vision" class="py-32 bg-black relative">
+        <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent"></div>
+        
+        <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
+            <div data-aos="fade-right">
+                <span class="text-gold text-xs uppercase tracking-widest mb-4 block">Notre Philosophie</span>
+                <h2 class="font-serif text-4xl md:text-5xl text-white mb-8 leading-tight">
+                    Nous ne touchons pas à la saleté.<br>
+                    <span class="text-gray-500 italic">Nous sculptons la lumière.</span>
+                </h2>
+                <p class="text-gray-400 font-light text-lg leading-relaxed mb-8">
+                    F Garage est un atelier de haute couture automobile. Notre mission n'est pas de nettoyer, mais de <strong>métamorphoser</strong>. 
+                </p>
+                <p class="text-gray-400 font-light text-lg leading-relaxed">
+                    De l'installation complexe de ciels étoilés à la pose chirurgicale de films de protection (PPF), chaque intervention est une œuvre d'art technique destinée à rendre votre véhicule unique au monde.
+                </p>
+            </div>
+            
+            <div class="relative h-[600px]" data-aos="fade-left">
+                <div class="absolute inset-0 border border-white/10 transform translate-x-4 translate-y-4"></div>
+                <!-- NOUVELLE IMAGE -->
+                <img src="https://images.unsplash.com/photo-1507136566006-cfc505b114fc?q=80&w=2070&auto=format&fit=crop" 
+                     alt="Detailing Interior Luxury" 
+                     class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000 ease-in-out">
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section (Enriched Visuals) -->
+    <section id="services" class="py-32 bg-dark relative px-4">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-24">
+                <h2 class="text-4xl md:text-6xl font-serif text-white mb-6">Nos Signatures</h2>
+                <div class="w-16 h-[1px] bg-gold mx-auto"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <!-- Service 1 -->
+                <div class="card-reveal bg-starry relative group h-[500px] border border-white/5 bg-black overflow-hidden cursor-pointer" data-aos="fade-up">
+                    <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all z-0"></div>
+                    <div class="relative z-10 h-full flex flex-col justify-end p-10">
+                        <i class="fas fa-star text-4xl text-gold mb-6 transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500"></i>
+                        <h3 class="text-3xl font-serif text-white mb-2">Ciel Étoilé</h3>
+                        <p class="text-white/60 text-sm font-light mb-6 transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-700 delay-100">
+                            Installation artisanale de fibre optique. Configuration personnalisée des constellations, étoiles filantes et couleurs. Une ambiance Rolls-Royce exclusive.
+                        </p>
+                        <div class="w-full h-[1px] bg-white/20 group-hover:bg-gold transition-colors duration-500"></div>
+                    </div>
+                </div>
+
+                <!-- Service 2 -->
+                <div class="card-reveal bg-ppf relative group h-[500px] border border-white/5 bg-black overflow-hidden cursor-pointer" data-aos="fade-up" data-aos-delay="100">
+                    <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all z-0"></div>
+                    <div class="relative z-10 h-full flex flex-col justify-end p-10">
+                        <i class="fas fa-shield-alt text-4xl text-gold mb-6 transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500"></i>
+                        <h3 class="text-3xl font-serif text-white mb-2">Protection PPF</h3>
+                        <p class="text-white/60 text-sm font-light mb-6 transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-700 delay-100">
+                            Le bouclier invisible ultime. Film auto-cicatrisant haute technologie qui préserve votre peinture des impacts et du temps.
+                        </p>
+                        <div class="w-full h-[1px] bg-white/20 group-hover:bg-gold transition-colors duration-500"></div>
+                    </div>
+                </div>
+
+                <!-- Service 3 -->
+                <div class="card-reveal bg-solar relative group h-[500px] border border-white/5 bg-black overflow-hidden cursor-pointer" data-aos="fade-up">
+                    <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all z-0"></div>
+                    <div class="relative z-10 h-full flex flex-col justify-end p-10">
+                        <i class="fas fa-temperature-low text-4xl text-gold mb-6 transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500"></i>
+                        <h3 class="text-3xl font-serif text-white mb-2">Film Solaire Céramique</h3>
+                        <p class="text-white/60 text-sm font-light mb-6 transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-700 delay-100">
+                            Rejet thermique extrême et esthétique sombre. Protégez votre intérieur et vos passagers avec style.
+                        </p>
+                        <div class="w-full h-[1px] bg-white/20 group-hover:bg-gold transition-colors duration-500"></div>
+                    </div>
+                </div>
+
+                <!-- Service 4 -->
+                <div class="card-reveal bg-dsp relative group h-[500px] border border-white/5 bg-black overflow-hidden cursor-pointer" data-aos="fade-up" data-aos-delay="100">
+                    <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all z-0"></div>
+                    <div class="relative z-10 h-full flex flex-col justify-end p-10">
+                        <i class="fas fa-hammer text-4xl text-gold mb-6 transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500"></i>
+                        <h3 class="text-3xl font-serif text-white mb-2">Débosselage (DSP)</h3>
+                        <p class="text-white/60 text-sm font-light mb-6 transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-700 delay-100">
+                            Restauration de la carrosserie sans peinture. L'art de faire disparaître les bosses en conservant la teinte d'origine.
+                        </p>
+                        <div class="w-full h-[1px] bg-white/20 group-hover:bg-gold transition-colors duration-500"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- NEW SECTION: Immersive Gallery -->
+    <section id="gallery" class="bg-black py-24">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-3xl md:text-5xl font-serif text-white mb-12 text-center" data-aos="fade-up">Galerie <span class="text-gold">Privée</span></h2>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 grid-rows-2 gap-4 h-[800px]">
+                <!-- Large item - NOUVELLE IMAGE -->
+                <div class="col-span-2 row-span-2 relative overflow-hidden group" data-aos="zoom-in">
+                    <img src="https://images.unsplash.com/photo-1542362567-b07e54358753?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Main Work Porsche">
+                    <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <span class="text-gold font-serif text-2xl tracking-widest border border-gold px-6 py-2">FINITION PPF</span>
+                    </div>
+                </div>
+                <!-- Small items - NOUVELLES IMAGES -->
+                <div class="col-span-1 row-span-1 relative overflow-hidden group" data-aos="zoom-in" data-aos-delay="100">
+                    <img src="https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?q=80&w=2064&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Detail Light">
+                </div>
+                <div class="col-span-1 row-span-1 relative overflow-hidden group" data-aos="zoom-in" data-aos-delay="200">
+                    <img src="https://images.unsplash.com/photo-1502877338535-766e1452684a?q=80&w=2072&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Detail Interior">
+                </div>
+                <!-- Wide item - NOUVELLE IMAGE -->
+                <div class="col-span-2 row-span-1 relative overflow-hidden group" data-aos="zoom-in" data-aos-delay="300">
+                    <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=2300&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Wide Detail Paint">
+                    <div class="absolute bottom-4 left-4">
+                        <p class="text-white text-xs uppercase tracking-widest bg-black/50 px-2">Reflets Miroir</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technical Expertise (Replaces Process) -->
+    <section class="py-24 bg-dark border-t border-white/5">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <h3 class="text-gold text-sm uppercase tracking-[0.3em] mb-6">Expertise Technique</h3>
+            <p class="text-2xl md:text-3xl font-serif text-white leading-relaxed">
+                "Nous utilisons exclusivement des matériaux de grade aérospatial et des techniques de pose certifiées pour garantir une longévité supérieure à 10 ans."
+            </p>
+            
+            <div class="flex justify-center gap-8 mt-12 opacity-50">
+                <i class="fas fa-award text-4xl text-white"></i>
+                <i class="fas fa-certificate text-4xl text-white"></i>
+                <i class="fas fa-medal text-4xl text-white"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 bg-black relative overflow-hidden">
+        <!-- Background decorative map or pattern -->
+        <div class="absolute inset-0 opacity-20" style="background-image: url('https://www.transparenttextures.com/patterns/cubes.png');"></div>
+
+        <div class="max-w-5xl mx-auto px-6 relative z-10">
+            <div class="bg-dark/80 backdrop-blur-md border border-white/10 p-8 md:p-16 shadow-2xl">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-serif text-white mb-4">Réserver votre Créneau</h2>
+                    <p class="text-gray-400 font-light">Accès atelier uniquement sur rendez-vous confirmé.</p>
+                </div>
+
+                <form class="space-y-8 max-w-2xl mx-auto">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="group">
+                            <label class="block text-xs uppercase tracking-widest text-gold mb-2">Identité</label>
+                            <input type="text" class="w-full bg-black/50 border-b border-white/20 py-3 text-white focus:outline-none focus:border-gold transition-colors" placeholder="Votre nom">
+                        </div>
+                        <div class="group">
+                            <label class="block text-xs uppercase tracking-widest text-gold mb-2">Contact</label>
+                            <input type="text" class="w-full bg-black/50 border-b border-white/20 py-3 text-white focus:outline-none focus:border-gold transition-colors" placeholder="05 50...">
+                        </div>
+                    </div>
+                    
+                    <div class="group">
+                        <label class="block text-xs uppercase tracking-widest text-gold mb-2">Le Projet</label>
+                        <select class="w-full bg-black/50 border-b border-white/20 py-3 text-white focus:outline-none focus:border-gold transition-colors">
+                            <option class="bg-black text-gray-500">Sélectionnez une prestation</option>
+                            <option class="bg-black">Installation Ciel Étoilé</option>
+                            <option class="bg-black">Full Protection PPF</option>
+                            <option class="bg-black">Teintage Vitres</option>
+                            <option class="bg-black">Débosselage (DSP)</option>
+                        </select>
+                    </div>
+
+                    <div class="pt-6 text-center">
+                        <button class="bg-gold text-black px-12 py-4 font-bold uppercase tracking-[0.2em] hover:bg-white transition-colors duration-300">
+                            Confirmer la demande
+                        </button>
+                    </div>
+                </form>
+
+                <div class="mt-16 text-center border-t border-white/10 pt-8">
+                    <p class="text-gold text-2xl font-serif">+213 550 00 00 00</p>
+                    <p class="text-gray-500 text-xs mt-2 uppercase tracking-widest">Alger — Algérie</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black py-12 text-center border-t border-white/5">
+        <a href="#" class="text-2xl font-serif font-bold tracking-widest text-white block mb-6">F GARAGE</a>
+        <div class="flex justify-center space-x-8 mb-8">
+            <a href="#" class="text-gray-500 hover:text-gold transition-colors"><i class="fab fa-instagram text-xl"></i></a>
+            <a href="#" class="text-gray-500 hover:text-gold transition-colors"><i class="fab fa-facebook text-xl"></i></a>
+            <a href="#" class="text-gray-500 hover:text-gold transition-colors"><i class="fab fa-tiktok text-xl"></i></a>
+        </div>
+        <p class="text-gray-700 text-[10px] uppercase tracking-[0.2em]">
+            &copy; 2024 F Garage. Engineering Luxury.
+        </p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            once: true,
+            duration: 1200,
+            offset: 50,
+        });
+
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const loader = document.getElementById('loader');
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 1000);
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
