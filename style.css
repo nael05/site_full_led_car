@@ -1,0 +1,189 @@
+/* ========================================== */
+/* GLOBAL & CURSEUR PERSONNALISÉ              */
+/* ========================================== */
+body {
+    background-color: #030303;
+    color: #f5f5f5;
+    cursor: none; /* Masque le curseur par défaut sur ordinateur */
+    overflow-x: hidden;
+}
+
+.cursor-dot,
+.cursor-outline {
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    z-index: 9999;
+    pointer-events: none;
+}
+
+.cursor-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #C5A059;
+}
+
+.cursor-outline {
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(197, 160, 89, 0.5);
+    transition: width 0.2s, height 0.2s, background-color 0.2s;
+}
+
+/* Animation du curseur au survol d'un lien */
+body.hovering .cursor-outline {
+    width: 60px;
+    height: 60px;
+    background-color: rgba(197, 160, 89, 0.1);
+    border-color: #C5A059;
+}
+
+/* ========================================== */
+/* FOND ETOILÉ (CANVAS)                       */
+/* ========================================== */
+#star-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: linear-gradient(to bottom, #030303, #05070a);
+}
+
+/* ========================================== */
+/* ANIMATIONS D'APPARITION AU SCROLL          */
+/* ========================================== */
+.reveal-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-on-scroll.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Délais en cascade pour un effet fluide */
+.delay-100 { transition-delay: 0.1s; }
+.delay-200 { transition-delay: 0.2s; }
+.delay-300 { transition-delay: 0.3s; }
+
+/* ========================================== */
+/* EFFET VERRE DÉPOLI (CARTES)                */
+/* ========================================== */
+.glass-panel {
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* ========================================== */
+/* GALERIE : SLIDERS AVANT/APRÈS              */
+/* ========================================== */
+.img-comp-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.img-comp-img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.img-comp-img img {
+    display: block;
+    height: 100%;
+    width: 100%; 
+    max-width: none;
+    object-fit: cover;
+}
+
+/* Ligne de séparation dorée */
+.img-comp-slider {
+    position: absolute;
+    z-index: 30; 
+    cursor: none; 
+    width: 2px;
+    height: 100%;
+    background: #C5A059;
+    top: 0;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Cercle central de la ligne de séparation */
+.slider-handle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #030303;
+    border: 1px solid #C5A059;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #C5A059;
+    box-shadow: 0 0 20px rgba(197, 160, 89, 0.3);
+}
+
+/* ========================================== */
+/* NAVIGATION & MENU HAUT                     */
+/* ========================================== */
+nav {
+    transition: transform 0.5s ease, background-color 0.3s ease;
+}
+
+.nav-hidden { 
+    transform: translateY(-100%); 
+}
+
+/* ========================================== */
+/* BANDE DÉFILANTE INFINIE (AVIS CLIENTS)     */
+/* ========================================== */
+.marquee-container {
+    width: 100vw; 
+    overflow: hidden; 
+    position: relative;
+    display: flex;
+}
+
+.marquee-content {
+    display: flex;
+    gap: 2rem;
+    padding-left: 2rem;
+    width: max-content;
+    /* Durée de l'animation : ajustez 45s pour modifier la vitesse */
+    animation: scroll-infinite 45s linear infinite; 
+}
+
+/* Mise en pause si l'utilisateur met la souris sur un avis */
+.marquee-content:hover { 
+    animation-play-state: paused; 
+}
+
+@keyframes scroll-infinite {
+    0% { transform: translateX(0); }
+    /* Le décalage de -50% fonctionne car on a cloné exactement 50% des cartes en HTML */
+    100% { transform: translateX(-50%); } 
+}
+
+/* ========================================== */
+/* RÉGLAGES POUR TÉLÉPHONES (MOBILE)          */
+/* ========================================== */
+@media (max-width: 768px) {
+    /* Rétablit le curseur normal sur le tactile */
+    body { cursor: auto; } 
+    
+    /* Masque le curseur personnalisé doré */
+    .cursor-dot, .cursor-outline { display: none; }
+    
+    /* Accélère un peu la bande défilante sur petit écran */
+    .marquee-content { animation-duration: 35s; } 
+}

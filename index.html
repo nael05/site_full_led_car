@@ -1,386 +1,453 @@
 <!DOCTYPE html>
-<html lang="fr" class="scroll-smooth">
+<html lang="fr" class="scroll-smooth scroll-pt-32">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>F GARAGE | Architecture Automobile</title>
-    <meta name="description" content="F Garage Algérie : Le spécialiste du Ciel Étoilé, PPF et Personnalisation. Un studio de transformation automobile, pas un centre de lavage.">
-
-    <!-- Google Fonts -->
+    <title>Full Led Car | L'Atelier d'Excellence Automobile</title>
+    <meta name="description" content="Atelier de haute couture automobile à Paris. Installation de ciels étoilés sur mesure et signatures lumineuses LED haute définition.">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
-    
-    <!-- FontAwesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@100;200;300;400;500&display=swap" rel="stylesheet">
 
-    <!-- AOS Animation Library -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        black: '#050505',
-                        dark: '#0a0a0a',
-                        gold: '#D4AF37',
-                        'gold-light': '#F1D676',
+                        void: '#030303',
+                        midnight: '#080b14',
+                        gold: '#C5A059',
+                        goldLight: '#E5C985',
+                        goldDim: '#8A6E36',
+                        silver: '#A0A0A0',
                     },
                     fontFamily: {
-                        serif: ['Cinzel', 'serif'],
                         sans: ['Montserrat', 'sans-serif'],
+                        serif: ['Cormorant Garamond', 'serif'],
                     },
-                    spacing: {
-                        '128': '32rem',
+                    backgroundImage: {
+                        'gold-gradient': 'linear-gradient(135deg, #C5A059 0%, #E5C985 50%, #C5A059 100%)',
+                        'subtle-glow': 'radial-gradient(circle at center, rgba(197, 160, 89, 0.08) 0%, transparent 70%)',
                     }
                 }
             }
         }
     </script>
-
-    <style>
-        body {
-            background-color: #050505;
-            color: #e5e5e5;
-            overflow-x: hidden;
-        }
-
-        /* Luxury Gold Gradient Text */
-        .text-gold-gradient {
-            background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        /* Image Reveal on Card Hover */
-        .card-reveal::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-size: cover;
-            background-position: center;
-            opacity: 0;
-            transition: opacity 0.6s ease;
-            z-index: 0;
-            filter: brightness(0.4);
-        }
-        
-        .card-reveal:hover::before {
-            opacity: 1;
-        }
-
-        /* Specific Images for Cards - NOUVELLES IMAGES */
-        .bg-starry::before { background-image: url('https://images.unsplash.com/photo-1549399542-7e3f8b79c341?q=80&w=1974&auto=format&fit=crop'); }
-        .bg-ppf::before { background-image: url('https://images.unsplash.com/photo-1600706432502-763d5bb0046e?q=80&w=2070&auto=format&fit=crop'); }
-        .bg-solar::before { background-image: url('https://images.unsplash.com/photo-1489824904134-891ab64532f1?q=80&w=1931&auto=format&fit=crop'); }
-        .bg-dsp::before { background-image: url('https://images.unsplash.com/photo-1619767886558-efdc259cde1a?q=80&w=2070&auto=format&fit=crop'); }
-
-        /* Loader */
-        .loader-line {
-            animation: expandWidth 1.5s ease-in-out forwards;
-        }
-        @keyframes expandWidth {
-            0% { width: 0; }
-            100% { width: 100px; }
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="font-sans antialiased">
+<body>
 
-    <!-- Loader -->
-    <div id="loader" class="fixed inset-0 z-[100] bg-black flex items-center justify-center transition-opacity duration-1000">
-        <div class="text-center">
-            <h1 class="font-serif text-4xl text-white mb-4 tracking-[0.3em]">F GARAGE</h1>
-            <div class="h-[2px] bg-gold mx-auto loader-line"></div>
+    <div class="cursor-dot" id="cursor-dot" aria-hidden="true"></div>
+    <div class="cursor-outline" id="cursor-outline" aria-hidden="true"></div>
+    <canvas id="star-canvas" aria-hidden="true"></canvas>
+
+    <div id="mobile-menu" class="fixed inset-0 bg-void/95 backdrop-blur-xl z-40 flex flex-col items-center justify-center opacity-0 pointer-events-none transition-opacity duration-500">
+        <div class="flex flex-col items-center space-y-10">
+            <a href="#atelier" class="mobile-link text-2xl font-serif italic text-white hover:text-gold transition-colors">L'Atelier</a>
+            <a href="#prestations" class="mobile-link text-2xl font-serif italic text-white hover:text-gold transition-colors">Signatures</a>
+            <a href="#gallery" class="mobile-link text-2xl font-serif italic text-white hover:text-gold transition-colors">Réalisations</a>
+            <a href="#contact" class="mobile-link text-sm uppercase tracking-[0.25em] text-gold border border-gold/30 px-10 py-4 hover:bg-gold hover:text-black transition-colors mt-8">Rendez-vous</a>
         </div>
     </div>
 
-    <!-- Navigation -->
-    <nav class="fixed w-full z-50 px-6 py-6 transition-all duration-300 bg-gradient-to-b from-black/90 to-transparent">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <a href="#" class="text-2xl md:text-3xl font-serif font-bold tracking-widest text-white relative group">
-                F GARAGE
-                <span class="absolute -bottom-2 left-0 w-0 h-[1px] bg-gold transition-all duration-300 group-hover:w-full"></span>
-            </a>
+    <nav id="navbar" class="fixed w-full z-50 top-0 left-0 border-b border-white/5 bg-void/90 backdrop-blur-lg" aria-label="Navigation principale">
+        <div class="max-w-[1400px] mx-auto px-6 h-24 flex items-center justify-between"> 
             
-            <div class="hidden md:flex space-x-12 items-center">
-                <a href="#vision" class="text-xs uppercase tracking-[0.2em] text-white/70 hover:text-gold transition-colors">Vision</a>
-                <a href="#services" class="text-xs uppercase tracking-[0.2em] text-white/70 hover:text-gold transition-colors">Expertise</a>
-                <a href="#gallery" class="text-xs uppercase tracking-[0.2em] text-white/70 hover:text-gold transition-colors">Galerie</a>
-                <a href="#contact" class="px-8 py-3 border border-white/20 text-gold text-xs uppercase tracking-widest hover:border-gold hover:bg-gold hover:text-black transition-all duration-500">
-                    Contact
+            <a href="#" class="hover-trigger flex flex-col items-start group" aria-label="Retour à l'accueil Full Led Car">
+                <span class="font-serif text-2xl md:text-3xl tracking-widest text-white group-hover:text-gold transition-colors duration-500">FULL LED</span>
+                <span class="text-[9px] md:text-[10px] uppercase tracking-[0.4em] text-gold/80 ml-1 mt-1">Atelier Paris</span>
+            </a>
+
+            <div class="hidden md:flex items-center space-x-16"> 
+                <a href="#atelier" class="hover-trigger text-xs uppercase tracking-[0.25em] text-gray-400 hover:text-white transition-colors relative group py-2">
+                    L'Atelier
+                    <span class="absolute bottom-0 left-0 w-0 h-[1px] bg-gold transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="#gallery" class="hover-trigger text-xs uppercase tracking-[0.25em] text-gray-400 hover:text-white transition-colors relative group py-2">
+                    Réalisations
+                    <span class="absolute bottom-0 left-0 w-0 h-[1px] bg-gold transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="#contact" class="hover-trigger px-8 py-3 border border-gold/30 text-gold text-xs uppercase tracking-[0.25em] hover:bg-gold hover:text-black transition-all duration-500">
+                    Rendez-vous
                 </a>
             </div>
 
-            <button class="md:hidden text-gold text-2xl"><i class="fas fa-bars"></i></button>
+            <button id="menu-btn" class="md:hidden text-white hover:text-gold transition-colors p-2 z-50 relative" aria-label="Ouvrir le menu">
+                <i class="fa-thin fa-bars text-3xl transition-transform duration-300" aria-hidden="true"></i>
+            </button>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <header class="relative h-screen w-full overflow-hidden">
-        <!-- Background Video/Image - NOUVELLE IMAGE -->
-        <div class="absolute inset-0">
-            <img src="https://images.unsplash.com/photo-1503376763036-066120622c74?q=80&w=2070&auto=format&fit=crop" 
-                 alt="Luxury Dark Car" 
-                 class="w-full h-full object-cover opacity-60 scale-105 animate-[pulse_10s_ease-in-out_infinite]">
-        </div>
-        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/60"></div>
+    <main>
+        <header class="relative min-h-screen flex items-center justify-center overflow-hidden pt-32">
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vw] bg-subtle-glow rounded-full pointer-events-none opacity-40 z-0"></div>
 
-        <div class="relative z-10 h-full flex flex-col justify-center items-center text-center px-4">
-            <div class="mb-6 overflow-hidden">
-                <p class="text-gold text-xs md:text-sm uppercase tracking-[0.5em] animate-[slideUp_1s_ease-out]" data-aos="fade-up">
-                    Architecture Automobile
+            <div class="container mx-auto px-6 relative z-10 text-center flex flex-col items-center">
+                <p class="reveal-on-scroll text-gold text-xs md:text-sm font-sans tracking-[0.5em] uppercase mb-8">
+                    L'Excellence Automobile
                 </p>
-            </div>
-            
-            <h1 class="text-5xl md:text-7xl lg:text-9xl font-serif text-white mb-8 leading-none tracking-tight" data-aos="fade-up" data-aos-delay="200">
-                SUBLIMATION<br>
-                <span class="text-gold-gradient italic text-4xl md:text-7xl lg:text-8xl block mt-2">Absolue.</span>
-            </h1>
-
-            <p class="text-gray-300 text-sm md:text-lg font-light max-w-xl mx-auto mb-12 tracking-wide leading-relaxed" data-aos="fade-up" data-aos-delay="400">
-                L'art de transformer l'ordinaire en exceptionnel. Ciel étoilé, protection invisible et personnalisation sur mesure.
-            </p>
-
-            <a href="#services" class="group relative inline-flex items-center justify-center px-8 py-4 overflow-hidden tracking-tighter text-white border border-white/30 rounded-full transition-all hover:border-gold" data-aos="fade-up" data-aos-delay="600">
-                <span class="absolute w-0 h-0 transition-all duration-500 ease-out bg-gold rounded-full group-hover:w-56 group-hover:h-56"></span>
-                <span class="relative text-xs uppercase tracking-[0.2em] group-hover:text-black font-semibold">Découvrir nos créations</span>
-            </a>
-        </div>
-        
-        <!-- Scroll Indicator -->
-        <div class="absolute bottom-12 left-0 right-0 flex justify-center animate-bounce">
-            <i class="fas fa-chevron-down text-white/30 text-xl"></i>
-        </div>
-    </header>
-
-    <!-- Vision Section -->
-    <section id="vision" class="py-32 bg-black relative">
-        <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent"></div>
-        
-        <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
-            <div data-aos="fade-right">
-                <span class="text-gold text-xs uppercase tracking-widest mb-4 block">Notre Philosophie</span>
-                <h2 class="font-serif text-4xl md:text-5xl text-white mb-8 leading-tight">
-                    Nous ne touchons pas à la saleté.<br>
-                    <span class="text-gray-500 italic">Nous sculptons la lumière.</span>
-                </h2>
-                <p class="text-gray-400 font-light text-lg leading-relaxed mb-8">
-                    F Garage est un atelier de haute couture automobile. Notre mission n'est pas de nettoyer, mais de <strong>métamorphoser</strong>. 
+                <h1 class="reveal-on-scroll delay-100 font-serif text-5xl md:text-8xl lg:text-9xl text-white leading-[1.1] mb-10 mix-blend-exclusion">
+                    Le Luxe <br> 
+                    <span class="italic font-light text-gray-400">S'illumine</span>
+                </h1>
+                <div class="reveal-on-scroll delay-200 w-px h-32 bg-gradient-to-b from-gold to-transparent my-6"></div> 
+                <p class="reveal-on-scroll delay-300 max-w-lg text-gray-400 font-light text-sm md:text-base leading-loose tracking-wide mb-12">
+                    Transformez votre véhicule en un sanctuaire nocturne. Installation de ciels étoilés artisanaux et d'éclairages d'ambiance haute définition.
                 </p>
-                <p class="text-gray-400 font-light text-lg leading-relaxed">
-                    De l'installation complexe de ciels étoilés à la pose chirurgicale de films de protection (PPF), chaque intervention est une œuvre d'art technique destinée à rendre votre véhicule unique au monde.
-                </p>
-            </div>
-            
-            <div class="relative h-[600px]" data-aos="fade-left">
-                <div class="absolute inset-0 border border-white/10 transform translate-x-4 translate-y-4"></div>
-                <!-- NOUVELLE IMAGE -->
-                <img src="https://images.unsplash.com/photo-1507136566006-cfc505b114fc?q=80&w=2070&auto=format&fit=crop" 
-                     alt="Detailing Interior Luxury" 
-                     class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000 ease-in-out">
-            </div>
-        </div>
-    </section>
 
-    <!-- Services Section (Enriched Visuals) -->
-    <section id="services" class="py-32 bg-dark relative px-4">
-        <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-24">
-                <h2 class="text-4xl md:text-6xl font-serif text-white mb-6">Nos Signatures</h2>
-                <div class="w-16 h-[1px] bg-gold mx-auto"></div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-                <!-- Service 1 -->
-                <div class="card-reveal bg-starry relative group h-[500px] border border-white/5 bg-black overflow-hidden cursor-pointer" data-aos="fade-up">
-                    <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all z-0"></div>
-                    <div class="relative z-10 h-full flex flex-col justify-end p-10">
-                        <i class="fas fa-star text-4xl text-gold mb-6 transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500"></i>
-                        <h3 class="text-3xl font-serif text-white mb-2">Ciel Étoilé</h3>
-                        <p class="text-white/60 text-sm font-light mb-6 transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-700 delay-100">
-                            Installation artisanale de fibre optique. Configuration personnalisée des constellations, étoiles filantes et couleurs. Une ambiance Rolls-Royce exclusive.
-                        </p>
-                        <div class="w-full h-[1px] bg-white/20 group-hover:bg-gold transition-colors duration-500"></div>
-                    </div>
-                </div>
-
-                <!-- Service 2 -->
-                <div class="card-reveal bg-ppf relative group h-[500px] border border-white/5 bg-black overflow-hidden cursor-pointer" data-aos="fade-up" data-aos-delay="100">
-                    <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all z-0"></div>
-                    <div class="relative z-10 h-full flex flex-col justify-end p-10">
-                        <i class="fas fa-shield-alt text-4xl text-gold mb-6 transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500"></i>
-                        <h3 class="text-3xl font-serif text-white mb-2">Protection PPF</h3>
-                        <p class="text-white/60 text-sm font-light mb-6 transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-700 delay-100">
-                            Le bouclier invisible ultime. Film auto-cicatrisant haute technologie qui préserve votre peinture des impacts et du temps.
-                        </p>
-                        <div class="w-full h-[1px] bg-white/20 group-hover:bg-gold transition-colors duration-500"></div>
-                    </div>
-                </div>
-
-                <!-- Service 3 -->
-                <div class="card-reveal bg-solar relative group h-[500px] border border-white/5 bg-black overflow-hidden cursor-pointer" data-aos="fade-up">
-                    <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all z-0"></div>
-                    <div class="relative z-10 h-full flex flex-col justify-end p-10">
-                        <i class="fas fa-temperature-low text-4xl text-gold mb-6 transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500"></i>
-                        <h3 class="text-3xl font-serif text-white mb-2">Film Solaire Céramique</h3>
-                        <p class="text-white/60 text-sm font-light mb-6 transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-700 delay-100">
-                            Rejet thermique extrême et esthétique sombre. Protégez votre intérieur et vos passagers avec style.
-                        </p>
-                        <div class="w-full h-[1px] bg-white/20 group-hover:bg-gold transition-colors duration-500"></div>
-                    </div>
-                </div>
-
-                <!-- Service 4 -->
-                <div class="card-reveal bg-dsp relative group h-[500px] border border-white/5 bg-black overflow-hidden cursor-pointer" data-aos="fade-up" data-aos-delay="100">
-                    <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all z-0"></div>
-                    <div class="relative z-10 h-full flex flex-col justify-end p-10">
-                        <i class="fas fa-hammer text-4xl text-gold mb-6 transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500"></i>
-                        <h3 class="text-3xl font-serif text-white mb-2">Débosselage (DSP)</h3>
-                        <p class="text-white/60 text-sm font-light mb-6 transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-700 delay-100">
-                            Restauration de la carrosserie sans peinture. L'art de faire disparaître les bosses en conservant la teinte d'origine.
-                        </p>
-                        <div class="w-full h-[1px] bg-white/20 group-hover:bg-gold transition-colors duration-500"></div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- NEW SECTION: Immersive Gallery -->
-    <section id="gallery" class="bg-black py-24">
-        <div class="max-w-7xl mx-auto px-4">
-            <h2 class="text-3xl md:text-5xl font-serif text-white mb-12 text-center" data-aos="fade-up">Galerie <span class="text-gold">Privée</span></h2>
-            
-            <div class="grid grid-cols-2 md:grid-cols-4 grid-rows-2 gap-4 h-[800px]">
-                <!-- Large item - NOUVELLE IMAGE -->
-                <div class="col-span-2 row-span-2 relative overflow-hidden group" data-aos="zoom-in">
-                    <img src="https://images.unsplash.com/photo-1542362567-b07e54358753?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Main Work Porsche">
-                    <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                        <span class="text-gold font-serif text-2xl tracking-widest border border-gold px-6 py-2">FINITION PPF</span>
-                    </div>
-                </div>
-                <!-- Small items - NOUVELLES IMAGES -->
-                <div class="col-span-1 row-span-1 relative overflow-hidden group" data-aos="zoom-in" data-aos-delay="100">
-                    <img src="https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?q=80&w=2064&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Detail Light">
-                </div>
-                <div class="col-span-1 row-span-1 relative overflow-hidden group" data-aos="zoom-in" data-aos-delay="200">
-                    <img src="https://images.unsplash.com/photo-1502877338535-766e1452684a?q=80&w=2072&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Detail Interior">
-                </div>
-                <!-- Wide item - NOUVELLE IMAGE -->
-                <div class="col-span-2 row-span-1 relative overflow-hidden group" data-aos="zoom-in" data-aos-delay="300">
-                    <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=2300&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Wide Detail Paint">
-                    <div class="absolute bottom-4 left-4">
-                        <p class="text-white text-xs uppercase tracking-widest bg-black/50 px-2">Reflets Miroir</p>
-                    </div>
+                <div class="reveal-on-scroll delay-300 flex flex-col md:flex-row gap-6 mt-4">
+                    <a href="#prestations" class="hover-trigger group relative px-10 py-4 overflow-hidden border border-gold/50 text-gold text-sm uppercase tracking-[0.2em] transition-all duration-300 hover:border-gold">
+                        <span class="absolute inset-0 w-0 bg-gold/10 transition-all duration-[250ms] ease-out group-hover:w-full"></span>
+                        <span class="relative">Nos Prestations</span>
+                    </a>
+                    <a href="#contact" class="hover-trigger group relative px-10 py-4 overflow-hidden bg-gold text-black text-sm uppercase tracking-[0.2em] font-medium transition-all duration-300 hover:bg-white">
+                        <span class="relative">Nous Contacter</span>
+                    </a>
                 </div>
             </div>
-        </div>
-    </section>
+        </header>
 
-    <!-- Technical Expertise (Replaces Process) -->
-    <section class="py-24 bg-dark border-t border-white/5">
-        <div class="max-w-4xl mx-auto px-6 text-center">
-            <h3 class="text-gold text-sm uppercase tracking-[0.3em] mb-6">Expertise Technique</h3>
-            <p class="text-2xl md:text-3xl font-serif text-white leading-relaxed">
-                "Nous utilisons exclusivement des matériaux de grade aérospatial et des techniques de pose certifiées pour garantir une longévité supérieure à 10 ans."
-            </p>
-            
-            <div class="flex justify-center gap-8 mt-12 opacity-50">
-                <i class="fas fa-award text-4xl text-white"></i>
-                <i class="fas fa-certificate text-4xl text-white"></i>
-                <i class="fas fa-medal text-4xl text-white"></i>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="py-24 bg-black relative overflow-hidden">
-        <!-- Background decorative map or pattern -->
-        <div class="absolute inset-0 opacity-20" style="background-image: url('https://www.transparenttextures.com/patterns/cubes.png');"></div>
-
-        <div class="max-w-5xl mx-auto px-6 relative z-10">
-            <div class="bg-dark/80 backdrop-blur-md border border-white/10 p-8 md:p-16 shadow-2xl">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl md:text-4xl font-serif text-white mb-4">Réserver votre Créneau</h2>
-                    <p class="text-gray-400 font-light">Accès atelier uniquement sur rendez-vous confirmé.</p>
+        <section id="prestations" class="py-32 relative bg-void z-10" aria-labelledby="titre-prestations">
+             <div class="container mx-auto px-6 max-w-[1400px]">
+                <div class="text-center mb-24 reveal-on-scroll">
+                    <span class="text-gold text-[10px] tracking-[0.3em] uppercase block mb-4">Collection</span>
+                    <h2 id="titre-prestations" class="font-serif text-4xl md:text-5xl text-white">Nos <span class="italic text-gray-500">Signatures</span></h2>
                 </div>
 
-                <form class="space-y-8 max-w-2xl mx-auto">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div class="group">
-                            <label class="block text-xs uppercase tracking-widest text-gold mb-2">Identité</label>
-                            <input type="text" class="w-full bg-black/50 border-b border-white/20 py-3 text-white focus:outline-none focus:border-gold transition-colors" placeholder="Votre nom">
-                        </div>
-                        <div class="group">
-                            <label class="block text-xs uppercase tracking-widest text-gold mb-2">Contact</label>
-                            <input type="text" class="w-full bg-black/50 border-b border-white/20 py-3 text-white focus:outline-none focus:border-gold transition-colors" placeholder="05 50...">
-                        </div>
-                    </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
                     
-                    <div class="group">
-                        <label class="block text-xs uppercase tracking-widest text-gold mb-2">Le Projet</label>
-                        <select class="w-full bg-black/50 border-b border-white/20 py-3 text-white focus:outline-none focus:border-gold transition-colors">
-                            <option class="bg-black text-gray-500">Sélectionnez une prestation</option>
-                            <option class="bg-black">Installation Ciel Étoilé</option>
-                            <option class="bg-black">Full Protection PPF</option>
-                            <option class="bg-black">Teintage Vitres</option>
-                            <option class="bg-black">Débosselage (DSP)</option>
-                        </select>
+                    <article class="glass-panel hover-trigger group transition-all duration-500 hover:border-gold/30 reveal-on-scroll delay-100 flex flex-col overflow-hidden rounded-xl shadow-2xl relative">
+                        <div class="w-full h-72 relative overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1617531653332-bd46c24f2068?q=80&w=1200&auto=format&fit=crop" alt="Habitacle de voiture de luxe avec ciel étoilé" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy">
+                            <div class="absolute inset-0 bg-gradient-to-t from-void via-void/80 to-transparent/20 opacity-95"></div>
+                            
+                            <div class="absolute top-6 left-6 right-8 flex justify-between items-start z-10">
+                                <div class="w-12 h-12 rounded-full border border-white/20 bg-black/40 backdrop-blur-md flex items-center justify-center text-gold group-hover:bg-gold group-hover:text-black transition-colors duration-500">
+                                     <i class="fa-thin fa-star-shooting text-xl" aria-hidden="true"></i>
+                                </div>
+                                <span class="text-white/80 text-sm font-serif italic group-hover:text-gold transition-colors mt-2">01</span>
+                            </div>
+                        </div>
+
+                        <div class="p-8 md:p-12 pt-0 flex flex-col flex-grow relative z-10 -mt-16">
+                            <h3 class="font-serif text-3xl md:text-4xl text-white mb-4 group-hover:translate-x-2 transition-transform duration-500">Le Ciel Étoilé</h3>
+                            <p class="text-gray-400 font-light text-sm leading-relaxed mb-8 border-b border-white/10 pb-8">L'option ultime pour une ambiance onirique. Une voûte céleste unique, incrustée point par point à la main selon l'architecture de votre habitacle.</p>
+                            
+                            <div class="space-y-8 mt-auto">
+                                <div>
+                                    <h4 class="text-gold text-[10px] uppercase tracking-[0.2em] mb-4">Densité d'incrustation</h4>
+                                    <div class="flex flex-wrap gap-3">
+                                        <span class="px-4 py-2 bg-white/5 border border-white/10 text-[10px] text-gray-300 uppercase tracking-wider rounded">600 Étoiles</span>
+                                        <span class="px-4 py-2 bg-white/5 border border-white/10 text-[10px] text-gray-300 uppercase tracking-wider rounded">1200 Étoiles</span>
+                                        <span class="px-4 py-2 bg-gold/10 border border-gold/30 text-[10px] text-gold uppercase tracking-wider rounded">Bespoke (1500+)</span>
+                                    </div>
+                                </div>
+                                <div>
+                                     <h4 class="text-gold text-[10px] uppercase tracking-[0.2em] mb-4">Ingénierie & Détails</h4>
+                                     <ul class="space-y-4">
+                                        <li class="flex items-start text-gray-400 text-sm font-light leading-relaxed">
+                                            <i class="fa-solid fa-check text-gold text-xs mt-1 mr-4"></i>
+                                            <span><strong>Fibres optiques Mitsubishi :</strong> Multi-diamètres (0.75mm à 1.5mm) pour créer une véritable illusion de profondeur 3D.</span>
+                                        </li>
+                                        <li class="flex items-start text-gray-400 text-sm font-light leading-relaxed">
+                                            <i class="fa-solid fa-check text-gold text-xs mt-1 mr-4"></i>
+                                            <span><strong>Moteurs LED Indépendants :</strong> Mode "Scintillement" (Twinkle) silencieux et naturel, contrôlable par application.</span>
+                                        </li>
+                                        <li class="flex items-start text-gray-400 text-sm font-light leading-relaxed">
+                                            <i class="fa-solid fa-check text-gold text-xs mt-1 mr-4"></i>
+                                            <span><strong>Étoiles Filantes :</strong> Intégration de modules "Shooting Stars" dynamiques avec fréquence et vitesse ajustables.</span>
+                                        </li>
+                                        <li class="flex items-start text-gray-400 text-sm font-light leading-relaxed">
+                                            <i class="fa-solid fa-check text-gold text-xs mt-1 mr-4"></i>
+                                            <span><strong>Finition Haute Couture :</strong> Possibilité de réfection complète du ciel de toit en Alcantara véritable.</span>
+                                        </li>
+                                     </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="glass-panel hover-trigger group transition-all duration-500 hover:border-gold/30 reveal-on-scroll delay-200 flex flex-col overflow-hidden rounded-xl shadow-2xl relative">
+                        <div class="w-full h-72 relative overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?q=80&w=1200&auto=format&fit=crop" alt="Éclairage d'ambiance LED intérieur" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy">
+                            <div class="absolute inset-0 bg-gradient-to-t from-void via-void/80 to-transparent/20 opacity-95"></div>
+                            
+                            <div class="absolute top-6 left-6 right-8 flex justify-between items-start z-10">
+                                <div class="w-12 h-12 rounded-full border border-white/20 bg-black/40 backdrop-blur-md flex items-center justify-center text-gold group-hover:bg-gold group-hover:text-black transition-colors duration-500">
+                                     <i class="fa-thin fa-wave-pulse text-xl" aria-hidden="true"></i>
+                                </div>
+                                <span class="text-white/80 text-sm font-serif italic group-hover:text-gold transition-colors mt-2">02</span>
+                            </div>
+                        </div>
+
+                        <div class="p-8 md:p-12 pt-0 flex flex-col flex-grow relative z-10 -mt-16">
+                            <h3 class="font-serif text-3xl md:text-4xl text-white mb-4 group-hover:translate-x-2 transition-transform duration-500">Signature Lumineuse</h3>
+                            <p class="text-gray-400 font-light text-sm leading-relaxed mb-8 border-b border-white/10 pb-8">Redessinez l'architecture intérieure de votre véhicule. Un éclairage d'ambiance continu, invisible le jour, spectaculaire la nuit.</p>
+                            
+                            <div class="space-y-8 mt-auto">
+                                 <div>
+                                    <h4 class="text-gold text-[10px] uppercase tracking-[0.2em] mb-4">Cartographie des Zones</h4>
+                                    <div class="flex flex-wrap gap-3">
+                                        <span class="px-4 py-2 bg-white/5 border border-white/10 text-[10px] text-gray-300 uppercase tracking-wider rounded">Tableau de bord</span>
+                                        <span class="px-4 py-2 bg-white/5 border border-white/10 text-[10px] text-gray-300 uppercase tracking-wider rounded">Portières (4)</span>
+                                        <span class="px-4 py-2 bg-white/5 border border-white/10 text-[10px] text-gray-300 uppercase tracking-wider rounded">Console & Pieds</span>
+                                    </div>
+                                </div>
+                                <div>
+                                     <h4 class="text-gold text-[10px] uppercase tracking-[0.2em] mb-4">Ingénierie & Détails</h4>
+                                     <ul class="space-y-4">
+                                        <li class="flex items-start text-gray-400 text-sm font-light leading-relaxed">
+                                            <i class="fa-solid fa-check text-gold text-xs mt-1 mr-4"></i>
+                                            <span><strong>Bandeaux Acryliques Ultra-Fins :</strong> Seulement 0.3mm d'épaisseur pour une intégration 100% OEM (d'origine) sans excroissance.</span>
+                                        </li>
+                                        <li class="flex items-start text-gray-400 text-sm font-light leading-relaxed">
+                                            <i class="fa-solid fa-check text-gold text-xs mt-1 mr-4"></i>
+                                            <span><strong>Flux LED Haute Densité :</strong> Diffusion de la lumière fluide et continue (effet Néon pur), sans aucun "pointillé" LED visible.</span>
+                                        </li>
+                                        <li class="flex items-start text-gray-400 text-sm font-light leading-relaxed">
+                                            <i class="fa-solid fa-check text-gold text-xs mt-1 mr-4"></i>
+                                            <span><strong>Technologie 64 Couleurs :</strong> Gestion bi-zone via application. Mode "Symphony" dynamique réagissant à l'accélération ou la musique.</span>
+                                        </li>
+                                        <li class="flex items-start text-gray-400 text-sm font-light leading-relaxed">
+                                            <i class="fa-solid fa-check text-gold text-xs mt-1 mr-4"></i>
+                                            <span><strong>Câblage Sécurisé :</strong> Faisceaux isolés, fusibles indépendants et intégration respectueuse de la garantie constructeur.</span>
+                                        </li>
+                                     </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                </div>
+             </div>
+        </section>
+
+        <section id="atelier" class="py-32 md:py-40 relative border-y border-white/5" aria-labelledby="titre-savoir-faire">
+            <div class="container mx-auto px-6 max-w-[1400px]">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-start">
+                    
+                    <div class="lg:col-span-5 lg:sticky lg:top-40 reveal-on-scroll self-start">
+                        <span class="text-gold text-[10px] tracking-[0.3em] uppercase block mb-6">Savoir-Faire</span>
+                        <h2 id="titre-savoir-faire" class="font-serif text-4xl md:text-6xl text-white mb-10 leading-tight">L'Art de la <br> <span class="text-reveal italic">Lumière</span></h2>
+                        <p class="text-gray-400 font-light text-sm md:text-base leading-relaxed mb-12 text-justify">
+                            Chaque projet est une commande spéciale. Comme un costume sur mesure, nous adaptons la densité, la couleur et le mouvement des étoiles à l'atmosphère de votre habitacle.
+                        </p>
+                        <ul class="space-y-10"> 
+                            <li class="flex items-start gap-6 group">
+                                <span class="text-gold font-serif italic text-2xl" aria-hidden="true">01.</span>
+                                <div>
+                                    <h3 class="text-white text-sm uppercase tracking-widest mb-2 group-hover:text-gold transition-colors">Conception</h3>
+                                    <p class="text-gray-500 text-xs font-light leading-relaxed">Design digital des constellations selon la géométrie du toit.</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-6 group">
+                                <span class="text-gold font-serif italic text-2xl" aria-hidden="true">02.</span>
+                                <div>
+                                    <h3 class="text-white text-sm uppercase tracking-widest mb-2 group-hover:text-gold transition-colors">Perçage Manuel</h3>
+                                    <p class="text-gray-500 text-xs font-light leading-relaxed">Précision chirurgicale sur cuir ou alcantara, jusqu'à 1500 points.</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-6 group">
+                                <span class="text-gold font-serif italic text-2xl" aria-hidden="true">03.</span>
+                                <div>
+                                    <h3 class="text-white text-sm uppercase tracking-widest mb-2 group-hover:text-gold transition-colors">Intégration</h3>
+                                    <p class="text-gray-500 text-xs font-light leading-relaxed">Câblage invisible, sécurisé et garanti 5 ans.</p>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
 
-                    <div class="pt-6 text-center">
-                        <button class="bg-gold text-black px-12 py-4 font-bold uppercase tracking-[0.2em] hover:bg-white transition-colors duration-300">
-                            Confirmer la demande
+                    <div class="lg:col-span-7 grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-10 mt-12 lg:mt-0">
+                        <div class="reveal-on-scroll delay-100 h-[400px] md:h-[600px] relative group overflow-hidden rounded-xl shadow-2xl">
+                            <img src="https://nsautocustom.com/cdn/shop/files/Design_sans_titre_1.png?v=1755542240&width=1400" alt="Détail du travail d'intégration" class="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110" loading="lazy">
+                            <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-700"></div>
+                        </div>
+                        <div class="reveal-on-scroll delay-200 h-[400px] md:h-[600px] relative group overflow-hidden mt-0 md:mt-24 rounded-xl shadow-2xl">
+                            <img src="https://wash-and-custom.fr/wp-content/uploads/2025/03/tuning-interieur-voiture-ambiance-led.jpg" alt="Faisceaux de fibres optiques" class="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110" loading="lazy">
+                            <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-700"></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section id="gallery" class="py-32 bg-midnight/50 relative">
+            <div class="container mx-auto px-6 max-w-[1400px]">
+                <div class="text-center mb-20 reveal-on-scroll">
+                    <span class="text-gold text-[10px] tracking-[0.3em] uppercase block mb-4">Le résultat</span>
+                    <h2 class="font-serif text-4xl md:text-5xl text-white">Nos <span class="italic text-gray-500">Transformations</span></h2>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                    <div class="img-comp-container hover-trigger rounded-2xl overflow-hidden shadow-2xl border border-white/10 relative h-[400px] md:h-[500px] w-full reveal-on-scroll">
+                        <div class="img-comp-img absolute inset-0 w-full h-full">
+                            <img src="https://images.unsplash.com/photo-1502877338535-766e1452684a?q=80&w=1200&auto=format&fit=crop" alt="Après : Ambiance Ciel étoilé" class="w-full h-full object-cover" loading="lazy">
+                            <span class="absolute top-6 right-6 text-white text-[10px] uppercase tracking-widest bg-black/60 px-4 py-2 rounded-full backdrop-blur-md z-20">Après</span>
+                        </div>
+                        <div class="img-comp-img img-comp-overlay absolute inset-0 w-full h-full">
+                            <img src="https://images.unsplash.com/photo-1563720223185-11003d516935?q=80&w=1200&auto=format&fit=crop" alt="Avant : Intérieur classique" class="w-full h-full object-cover" loading="lazy">
+                            <span class="absolute top-6 left-6 text-white text-[10px] uppercase tracking-widest bg-black/60 px-4 py-2 rounded-full backdrop-blur-md z-20 border border-white/20">Avant</span>
+                        </div>
+                    </div>
+
+                    <div class="img-comp-container hover-trigger rounded-2xl overflow-hidden shadow-2xl border border-white/10 relative h-[400px] md:h-[500px] w-full reveal-on-scroll delay-200">
+                        <div class="img-comp-img absolute inset-0 w-full h-full">
+                            <img src="https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?q=80&w=1200&auto=format&fit=crop" alt="Après : Lignes LED" class="w-full h-full object-cover" loading="lazy">
+                            <span class="absolute top-6 right-6 text-white text-[10px] uppercase tracking-widest bg-black/60 px-4 py-2 rounded-full backdrop-blur-md z-20">Après</span>
+                        </div>
+                        <div class="img-comp-img img-comp-overlay absolute inset-0 w-full h-full">
+                            <img src="https://images.unsplash.com/photo-1617531653332-bd46c24f2068?q=80&w=1200&auto=format&fit=crop" alt="Avant : Sans LED" class="w-full h-full object-cover" loading="lazy">
+                            <span class="absolute top-6 left-6 text-white text-[10px] uppercase tracking-widest bg-black/60 px-4 py-2 rounded-full backdrop-blur-md z-20 border border-white/20">Avant</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-24 overflow-hidden bg-void relative z-10 w-full" aria-labelledby="titre-temoignages">
+            <div class="mb-16 text-center reveal-on-scroll">
+                <span class="text-gold text-[10px] tracking-[0.3em] uppercase block mb-4">Livre d'or</span>
+                <h2 id="titre-temoignages" class="font-serif text-3xl md:text-5xl text-white">Confidences de <span class="text-gold italic">Gentlemen Drivers</span></h2>
+            </div>
+
+            <div class="marquee-container bg-midnight/80 border-y border-white/5 py-10 shadow-2xl" aria-label="Avis clients">
+                <div class="marquee-content items-center">
+                    
+                    <article class="glass-panel rounded-xl w-[350px] md:w-[450px] p-8 hover-trigger transition-all duration-300 hover:border-gold/30 flex-shrink-0 relative">
+                        <i class="fa-solid fa-quote-left text-3xl text-white/5 absolute top-6 right-8"></i>
+                        <div class="flex text-gold mb-4 text-xs gap-1"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        <p class="text-gray-300 font-serif italic text-lg leading-relaxed mb-4">"Absolument bluffant. L'intérieur de ma RS6 a pris une toute autre dimension. Le scintillement est hypnotique."</p>
+                        <p class="text-[10px] text-white uppercase tracking-widest font-medium">Pierre A. <span class="text-gold">|</span> Audi RS6</p>
+                    </article>
+
+                    <article class="glass-panel rounded-xl w-[350px] md:w-[450px] p-8 hover-trigger transition-all duration-300 hover:border-gold/30 flex-shrink-0 relative">
+                        <i class="fa-solid fa-quote-left text-3xl text-white/5 absolute top-6 right-8"></i>
+                        <div class="flex text-gold mb-4 text-xs gap-1"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        <p class="text-gray-300 font-serif italic text-lg leading-relaxed mb-4">"Un travail d'orfèvre. Aucun pli sur l'Alcantara, aucune trace de démontage, juste de la magie pure la nuit."</p>
+                        <p class="text-[10px] text-white uppercase tracking-widest font-medium">Karim B. <span class="text-gold">|</span> Mercedes S-Class</p>
+                    </article>
+
+                    <article class="glass-panel rounded-xl w-[350px] md:w-[450px] p-8 hover-trigger transition-all duration-300 hover:border-gold/30 flex-shrink-0 relative">
+                        <i class="fa-solid fa-quote-left text-3xl text-white/5 absolute top-6 right-8"></i>
+                        <div class="flex text-gold mb-4 text-xs gap-1"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        <p class="text-gray-300 font-serif italic text-lg leading-relaxed mb-4">"Les lignes LED sont ultra-fines. Le service VIP est à la hauteur du résultat. Je recommande."</p>
+                        <p class="text-[10px] text-white uppercase tracking-widest font-medium">Thomas L. <span class="text-gold">|</span> Porsche Panamera</p>
+                    </article>
+
+                    <article class="glass-panel rounded-xl w-[350px] md:w-[450px] p-8 hover-trigger transition-all duration-300 hover:border-gold/30 flex-shrink-0 relative">
+                        <i class="fa-solid fa-quote-left text-3xl text-white/5 absolute top-6 right-8"></i>
+                        <div class="flex text-gold mb-4 text-xs gap-1"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        <p class="text-gray-300 font-serif italic text-lg leading-relaxed mb-4">"Mon M4 est méconnaissable de nuit. Les étoiles filantes ajoutent un détail que tout le monde remarque."</p>
+                        <p class="text-[10px] text-white uppercase tracking-widest font-medium">Julien D. <span class="text-gold">|</span> BMW M4</p>
+                    </article>
+
+                    <article class="glass-panel rounded-xl w-[350px] md:w-[450px] p-8 hover-trigger transition-all duration-300 hover:border-gold/30 flex-shrink-0 relative" aria-hidden="true">
+                        <i class="fa-solid fa-quote-left text-3xl text-white/5 absolute top-6 right-8"></i>
+                        <div class="flex text-gold mb-4 text-xs gap-1"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        <p class="text-gray-300 font-serif italic text-lg leading-relaxed mb-4">"Absolument bluffant. L'intérieur de ma RS6 a pris une toute autre dimension. Le scintillement est hypnotique."</p>
+                        <p class="text-[10px] text-white uppercase tracking-widest font-medium">Pierre A. <span class="text-gold">|</span> Audi RS6</p>
+                    </article>
+
+                    <article class="glass-panel rounded-xl w-[350px] md:w-[450px] p-8 hover-trigger transition-all duration-300 hover:border-gold/30 flex-shrink-0 relative" aria-hidden="true">
+                        <i class="fa-solid fa-quote-left text-3xl text-white/5 absolute top-6 right-8"></i>
+                        <div class="flex text-gold mb-4 text-xs gap-1"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        <p class="text-gray-300 font-serif italic text-lg leading-relaxed mb-4">"Un travail d'orfèvre. Aucun pli sur l'Alcantara, aucune trace de démontage, juste de la magie pure la nuit."</p>
+                        <p class="text-[10px] text-white uppercase tracking-widest font-medium">Karim B. <span class="text-gold">|</span> Mercedes S-Class</p>
+                    </article>
+
+                    <article class="glass-panel rounded-xl w-[350px] md:w-[450px] p-8 hover-trigger transition-all duration-300 hover:border-gold/30 flex-shrink-0 relative" aria-hidden="true">
+                        <i class="fa-solid fa-quote-left text-3xl text-white/5 absolute top-6 right-8"></i>
+                        <div class="flex text-gold mb-4 text-xs gap-1"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        <p class="text-gray-300 font-serif italic text-lg leading-relaxed mb-4">"Les lignes LED sont ultra-fines. Le service VIP est à la hauteur du résultat. Je recommande."</p>
+                        <p class="text-[10px] text-white uppercase tracking-widest font-medium">Thomas L. <span class="text-gold">|</span> Porsche Panamera</p>
+                    </article>
+
+                    <article class="glass-panel rounded-xl w-[350px] md:w-[450px] p-8 hover-trigger transition-all duration-300 hover:border-gold/30 flex-shrink-0 relative" aria-hidden="true">
+                        <i class="fa-solid fa-quote-left text-3xl text-white/5 absolute top-6 right-8"></i>
+                        <div class="flex text-gold mb-4 text-xs gap-1"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        <p class="text-gray-300 font-serif italic text-lg leading-relaxed mb-4">"Mon M4 est méconnaissable de nuit. Les étoiles filantes ajoutent un détail que tout le monde remarque."</p>
+                        <p class="text-[10px] text-white uppercase tracking-widest font-medium">Julien D. <span class="text-gold">|</span> BMW M4</p>
+                    </article>
+
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="py-40 relative z-10 border-t border-white/5 bg-midnight/30">
+            <div class="container mx-auto px-6 max-w-4xl">
+                <div class="reveal-on-scroll text-center mb-20">
+                    <span class="text-gold text-[10px] tracking-[0.3em] uppercase block mb-4">Conciergerie</span>
+                    <h2 class="font-serif text-5xl md:text-6xl text-white mb-6">Entrez dans la <span class="italic text-gold">Lumière</span></h2>
+                    <p class="text-gray-500 font-light tracking-wide">Demande de devis exclusif. Réponse de nos experts sous 24h.</p>
+                </div>
+
+                <form class="space-y-12 bg-void/50 p-8 md:p-12 rounded-xl border border-white/5 shadow-2xl backdrop-blur-sm" onsubmit="event.preventDefault(); alert('Merci. Votre demande a bien été transmise à notre atelier.');"> 
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12"> 
+                        <div class="group relative reveal-on-scroll delay-100">
+                            <input type="text" id="name" required placeholder=" " class="block py-4 px-0 w-full text-white bg-transparent border-b border-gray-700 appearance-none focus:outline-none focus:border-gold focus:ring-0 peer transition-colors">
+                            <label for="name" class="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-8 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-gold peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-8">NOM COMPLET</label>
+                        </div>
+                        <div class="group relative reveal-on-scroll delay-100">
+                            <input type="email" id="email" required placeholder=" " class="block py-4 px-0 w-full text-white bg-transparent border-b border-gray-700 appearance-none focus:outline-none focus:border-gold focus:ring-0 peer transition-colors">
+                            <label for="email" class="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-8 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-gold peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-8">ADRESSE E-MAIL</label>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12"> 
+                        <div class="group relative reveal-on-scroll delay-200">
+                            <input type="tel" id="phone" required placeholder=" " class="block py-4 px-0 w-full text-white bg-transparent border-b border-gray-700 appearance-none focus:outline-none focus:border-gold focus:ring-0 peer transition-colors">
+                            <label for="phone" class="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-8 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-gold peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-8">TÉLÉPHONE</label>
+                        </div>
+                        <div class="group relative reveal-on-scroll delay-200">
+                            <input type="text" id="model" required placeholder=" " class="block py-4 px-0 w-full text-white bg-transparent border-b border-gray-700 appearance-none focus:outline-none focus:border-gold focus:ring-0 peer transition-colors">
+                            <label for="model" class="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-8 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-gold peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-8">MARQUE ET MODÈLE DU VÉHICULE</label>
+                        </div>
+                    </div>
+
+                    <div class="group relative reveal-on-scroll delay-300">
+                        <select id="service" required class="block py-4 px-0 w-full text-white bg-transparent border-b border-gray-700 appearance-none focus:outline-none focus:border-gold focus:ring-0 peer transition-colors cursor-pointer">
+                            <option value="" disabled selected hidden></option>
+                            <option value="ciel" class="bg-midnight text-white">Le Ciel Étoilé</option>
+                            <option value="led" class="bg-midnight text-white">La Signature Lumineuse LED</option>
+                            <option value="both" class="bg-midnight text-white">Pack Complet (Ciel + LED)</option>
+                            <option value="other" class="bg-midnight text-white">Projet Sur-Mesure / Autre</option>
+                        </select>
+                        <label for="service" class="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-8 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-gold peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-8">PRESTATION SOUHAITÉE</label>
+                        <div class="absolute right-0 top-4 pointer-events-none text-gray-500 peer-focus:text-gold transition-colors">
+                            <i class="fa-solid fa-chevron-down text-xs"></i>
+                        </div>
+                    </div>
+
+                    <div class="group relative reveal-on-scroll delay-300">
+                        <textarea id="message" rows="3" required placeholder=" " class="block py-4 px-0 w-full text-white bg-transparent border-b border-gray-700 appearance-none focus:outline-none focus:border-gold focus:ring-0 peer transition-colors resize-none"></textarea>
+                        <label for="message" class="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-8 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-gold peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-8">DÉTAILS DE VOTRE PROJET (Options, toit ouvrant, couleur habitacle...)</label>
+                    </div>
+
+                    <div class="text-center reveal-on-scroll delay-300 pt-8">
+                        <button type="submit" class="hover-trigger relative inline-flex items-center justify-center px-16 py-5 overflow-hidden font-medium tracking-tighter text-white bg-transparent border border-gray-700 rounded-sm group transition-all duration-500 hover:border-gold w-full md:w-auto">
+                            <span class="absolute w-0 h-0 transition-all duration-500 ease-out bg-gold rounded-full group-hover:w-[800px] group-hover:h-[800px] opacity-10"></span>
+                            <span class="relative uppercase tracking-[0.3em] text-sm font-bold group-hover:text-gold transition-colors">Confirmer la demande</span>
                         </button>
                     </div>
                 </form>
-
-                <div class="mt-16 text-center border-t border-white/10 pt-8">
-                    <p class="text-gold text-2xl font-serif">+213 550 00 00 00</p>
-                    <p class="text-gray-500 text-xs mt-2 uppercase tracking-widest">Alger — Algérie</p>
-                </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
-    <!-- Footer -->
-    <footer class="bg-black py-12 text-center border-t border-white/5">
-        <a href="#" class="text-2xl font-serif font-bold tracking-widest text-white block mb-6">F GARAGE</a>
-        <div class="flex justify-center space-x-8 mb-8">
-            <a href="#" class="text-gray-500 hover:text-gold transition-colors"><i class="fab fa-instagram text-xl"></i></a>
-            <a href="#" class="text-gray-500 hover:text-gold transition-colors"><i class="fab fa-facebook text-xl"></i></a>
-            <a href="#" class="text-gray-500 hover:text-gold transition-colors"><i class="fab fa-tiktok text-xl"></i></a>
+    <footer class="py-16 border-t border-white/5 bg-black text-center relative z-20">
+        <p class="font-serif text-3xl text-white tracking-widest mb-4">FULL LED</p>
+        <div class="flex justify-center gap-8 mb-10">
+            <a href="#" class="hover-trigger text-gray-600 hover:text-white transition-colors text-xl" aria-label="Visiter notre page Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
+            <a href="#" class="hover-trigger text-gray-600 hover:text-white transition-colors text-xl" aria-label="Visiter notre page Facebook"><i class="fa-brands fa-facebook-f" aria-hidden="true"></i></a>
         </div>
-        <p class="text-gray-700 text-[10px] uppercase tracking-[0.2em]">
-            &copy; 2024 F Garage. Engineering Luxury.
-        </p>
+        <p class="text-[10px] text-gray-700 uppercase tracking-[0.25em]">&copy; 2026 Full Led Car. L'Atelier Paris. Tous droits réservés.</p>
     </footer>
 
-    <!-- Scripts -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-        AOS.init({
-            once: true,
-            duration: 1200,
-            offset: 50,
-        });
-
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                const loader = document.getElementById('loader');
-                loader.style.opacity = '0';
-                setTimeout(() => {
-                    loader.style.display = 'none';
-                }, 1000);
-            }, 1000);
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
